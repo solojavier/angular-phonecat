@@ -9,21 +9,6 @@ describe('PhoneCat App', function() {
     });
 
 
-    it('should filter the phone list as user types into the search box', function() {
-
-      var phoneList = element.all(by.repeater('phone in phones'));
-      var query = element(by.model('query'));
-
-      expect(phoneList.count()).toBe(3);
-
-      query.sendKeys('nexus');
-      expect(phoneList.count()).toBe(1);
-
-      query.clear();
-      query.sendKeys('motorola');
-      expect(phoneList.count()).toBe(2);
-    });
-
     it('should be possible to control phone order via the drop down select box', function() {
 
       var phoneNameColumn = element.all(by.repeater('phone in phones').column('{{phone.name}}'));
@@ -48,6 +33,16 @@ describe('PhoneCat App', function() {
         "MOTOROLA XOOM\u2122",
         "Motorola XOOM\u2122 with Wi-Fi"
       ]);
+    });
+
+
+    it('should render phone specific links', function() {
+      var query = element(by.model('query'));
+      query.sendKeys('nexus');
+      element.all(by.css('.phones li a')).first().click();
+      browser.getLocationAbsUrl().then(function(url) {
+        expect(url.split('#')[1]).toBe('/phones/nexus-s');
+      });
     });
   });
 });
